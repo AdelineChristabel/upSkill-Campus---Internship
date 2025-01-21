@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 # Importing libraries
 
 from __future__ import print_function
@@ -16,84 +13,27 @@ from sklearn import metrics
 from sklearn import tree
 import warnings
 warnings.filterwarnings('ignore')
-
-
-# In[2]:
-
-
+#Read the .csv file
 data = pd.read_csv(r"C:\Users\ADELINE CHRISTABEL\Desktop\Crop_recommendation.csv")
 #data
 
-
-# In[3]:
-
-
 data.head()
-
-
-# In[4]:
-
-
 data.tail()
-
-
-# In[5]:
-
-
 #data.size
-
-
-# In[6]:
-
-
 data.sample(10)
 
-
-# In[13]:
-
-
 #data.shape
-
-
-# In[15]:
-
-
 data.info()
-
-
-# In[17]:
-
-
+#Check for the null values
 data.isna().sum()
-
-
-# In[19]:
-
-
+#if null present, drop them
 data = data.dropna()
-
-
-# In[21]:
-
-
+#drop duplicates, if present
 data = data.drop_duplicates()
 
-
-# In[23]:
-
-
 #data.shape
-
-
-# In[25]:
-
-
 data.describe()
-
-
-# In[27]:
-
-
+#Data Visualization
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -127,8 +67,6 @@ plt.tight_layout()
 plt.show()
 
 
-# In[28]:
-
 
 # Define a list of unique colors (length should match or exceed the number of columns)
 colors = sns.color_palette("husl", len(columns))  # 'husl' generates visually distinct colors
@@ -157,9 +95,6 @@ plt.tight_layout()
 plt.show()
 
 
-# In[29]:
-
-
 # Filter only numeric columns from the data
 numeric_data = data[columns].select_dtypes(include=['number'])
 
@@ -173,9 +108,7 @@ plt.title('Heatmap of Correlations for Selected Columns', fontsize=16)
 plt.show()
 
 
-# In[30]:
-
-
+#data Preprocessing
 from sklearn.preprocessing import StandardScaler
 
 # Create a StandardScaler object
@@ -186,16 +119,11 @@ numerical_columns = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']
 
 # Apply StandardScaler to the numerical columns
 data[numerical_columns] = scaler.fit_transform(data[numerical_columns])
-
 # Show the scaled data
 print(data.head())
 
 
-# In[31]:
-
-
 from sklearn.preprocessing import LabelEncoder
-
 # Initialize LabelEncoder
 le_label = LabelEncoder()
 
@@ -206,9 +134,7 @@ data['label'] = le_label.fit_transform(data['label'])
 print(data.head())
 
 
-# In[33]:
-
-
+#Splitting the data into train and test sets and training
 from sklearn.model_selection import train_test_split
 
 # Define features and target
@@ -221,16 +147,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 
 
-# In[34]:
-
 
 # Save the dataset to a CSV file without the index
 data.to_csv('CropRecommendationTesting.csv', index=None)
 
-
-# In[35]:
-
-
+#training, using various  ML models
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.linear_model import LinearRegression
@@ -238,7 +159,6 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor
-
 
 
 models = {
@@ -250,9 +170,6 @@ models = {
     "K-Nearest Neighbors": KNeighborsRegressor(),
     
 }
-
-
-# In[37]:
 
 
 results = []
@@ -269,10 +186,7 @@ results_df = pd.DataFrame(results).sort_values(by="R2", ascending=False)
 print(results_df)
 
 
-# In[44]:
-
-
-# Step 6: Select the best model
+#  Select the best model
 best_model_name = results_df.iloc[0]["Model"]
 print(f"Best model: {best_model_name}")
 
@@ -280,7 +194,6 @@ best_model = models[best_model_name]
 best_model.fit(X_train, y_train)
 
 
-# In[45]:
 
 
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
@@ -298,8 +211,6 @@ print(f"Mean Absolute Error: {mae:.4f}")
 print(f"R² Score: {r2:.4f}")
 
 
-# In[46]:
-
 
 import joblib
 
@@ -308,10 +219,7 @@ joblib.dump(best_model, model_filename)
 joblib.dump(le_label, 'label_encoder.pkl')
 print(f"Model saved successfully as {model_filename}")
 
-
-# In[47]:
-
-
+#-----Streamlit framework-----
 import streamlit as st
 import pandas as pd
 import joblib
@@ -373,7 +281,6 @@ else:
     st.write("Please upload a CSV file or manually enter data for prediction.")
 
 
-# In[ ]:
 
 
 
