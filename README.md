@@ -75,7 +75,7 @@ The dataset `Crop_recommendation.csv` contains the following features:
 ### Step 1: Train the Model
 Run the following script to process the dataset, train the model, and save it for future use:
 ```bash
-python CropRecommendation.py
+python CropPrediction.py
 ```
 This will generate:
 
@@ -87,7 +87,7 @@ Launch the Web Application
 Start the Streamlit app with:
 
 ```bash
-streamlit run CropRecommendation.py
+streamlit run CropPrediction.py
 ```
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
